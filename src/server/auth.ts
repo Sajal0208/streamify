@@ -62,18 +62,13 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   theme: {
-    colorScheme: "auto",
-    brandColor: "",
-    logo: "",
-    buttonText: "",
+    colorScheme: "light",
+    brandColor: "#11999E",
+    logo: "/logo.svg",
+    buttonText: "#FFFFFF",
   },
 };
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
 export const getServerAuthSession = (ctx: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
