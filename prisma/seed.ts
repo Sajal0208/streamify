@@ -64,6 +64,7 @@ const playlistHasVideos: PlaylistHasVideo[] = JSON.parse(
   fs.readFileSync(playlistHasVideoFile, "utf-8"),
 ) as PlaylistHasVideo[];
 
+// Process the data in chunks (According to Number size provided as second argument)
 async function processInChunks<T, U>(
   items: T[],
   chunkSize: number,
@@ -184,7 +185,7 @@ async function main() {
       const existingAnnouncementEngagements =
         await prisma.announcementEngagement.findMany({
           where: {
-            announcementId: announcementEngagement.announcementId, // Fixed typo here
+            announcementId: announcementEngagement.announcementId, 
             userId: announcementEngagement.userId,
           },
         });
@@ -200,6 +201,7 @@ async function main() {
       }
     },
   );
+  
   await processInChunks(comments, 1, (comment) =>
     prisma.comment.upsert({
       where: { id: comment.id },
