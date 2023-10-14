@@ -18,7 +18,7 @@ interface VideoComponentProps {
   refetch?: () => Promise<unknown>;
 }
 
-export const MuliColumnVideo: React.FC<VideoComponentProps> = ({
+export const MultiColumnVideo: React.FC<VideoComponentProps> = ({
   videos,
   users,
 }) => (
@@ -123,7 +123,7 @@ export function VideoTitle({
   limitHeight,
   limitSize,
 }: {
-  title: string;
+  title: string | null;
   limitHeight?: boolean;
   limitSize?: boolean;
 }) {
@@ -174,7 +174,7 @@ export function UserImage({
   return (
     <div className={`relative h-10 w-10 ${className}`}>
       <Image
-        src={image || "/profile.jpg"}
+        src={image || "/profile_image.jpg"}
         alt=""
         className="absolute rounded-full"
         fill
