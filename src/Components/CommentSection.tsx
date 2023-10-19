@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { UserImage } from "./Components";
 import Button from "./Buttons/Button";
+import {toast} from "react-toastify";
 
 interface Comment {
   comment: {
@@ -23,6 +24,18 @@ interface CommentSectionProps {
   videoId: string;
   comments: Comment[];
   refetch: () => Promise<unknown>;
+}
+
+const toastError = ({message}: {message: string}) => {
+  toast.error(message, {
+    position: "bottom-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: false,
+    progress: undefined,
+  })
 }
 
 export default function CommentSection({
@@ -53,6 +66,11 @@ export default function CommentSection({
 
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if(commentInput.length < 5) { 
+      toastError({message: "Comment must be at least 5 characters long"})
+      return
+    }
+
     addComment({
       videoId: videoId,
       userId: sessionData ? sessionData.user.id : ("none" as string),

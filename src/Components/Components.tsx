@@ -5,7 +5,7 @@ export { default as Navbar } from "./Navbar";
 export { default as Sidebar } from "./Sidebar";
 export { default as Footer } from "./Footer";
 // export { MultiColumnPlaylist, SinglePlaylist } from "./PlaylistComponent";
-// export { default as ProfileHeader } from "./ProfileHeader";
+export { default as ProfileHeader } from "./ProfileHeader";
 export {
   MultiColumnVideo,
   SingleColumnVideo,

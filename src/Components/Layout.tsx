@@ -1,6 +1,9 @@
 import { Navbar, Sidebar, Footer } from "./Components";
 import React, { useState } from "react";
 import { Menu } from "./Icons/Icons";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface LayoutProps {
   children: JSX.Element;
@@ -24,12 +27,14 @@ export default function Layout({ children, closeSidebar }: LayoutProps) {
           <Menu className="h-6 w-6 stroke-gray-400" aria-hidden="true" />
         </button>
       </Navbar>
+      <ToastContainer />
 
       <Sidebar
         isOpen={sidebarOpen}
         closeSidebar={closeSidebar}
         setSidebarOpen={setSidebarOpen}
       ></Sidebar>
+      
       <div className="lg:hidden">
         <Footer />
       </div>

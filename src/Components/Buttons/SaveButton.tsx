@@ -18,13 +18,14 @@ export default function SaveButton({ videoId }: { videoId: string }) {
     api.playlist.getSavePlaylistData.useQuery(sessionData?.user?.id as string, {
       enabled: false, // this query will not run automatically
     });
+
   useEffect(() => {
     if (videoId && open) {
       void refetchPlaylists();
       const initialCheckedStatus: { [key: string]: boolean } = {};
       playlists?.forEach((playlist) => {
         initialCheckedStatus[playlist.id] = playlist.videos.some(
-          (videoItem) => videoItem.videoId === videoId
+          (videoItem) => videoItem.videoId === videoId,
         );
       });
 
@@ -40,7 +41,7 @@ export default function SaveButton({ videoId }: { videoId: string }) {
     input: {
       playlistId: string;
       videoId: string;
-    }
+    },
   ) => {
     addVideoToPlaylistMutation.mutate(input);
     setCheckedStatus({
@@ -65,7 +66,7 @@ export default function SaveButton({ videoId }: { videoId: string }) {
             void refetchPlaylists(); // Refetch playlists data after successful mutation
             setNewPlaylistName(""); // Clear the input field
           },
-        }
+        },
       );
     }
   };
