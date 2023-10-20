@@ -15,7 +15,7 @@ export default function SaveButton({ videoId }: { videoId: string }) {
 
   // ! 4 start
   const { data: playlists, refetch: refetchPlaylists } =
-    api.playlist.getSavePlaylistData.useQuery(sessionData?.user?.id as string, {
+    api.playlist.getSavePlaylistData.useQuery(sessionData!.user!.id as string, {
       enabled: false, // this query will not run automatically
     });
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function SaveButton({ videoId }: { videoId: string }) {
     if (newPlaylistName) {
       createPlaylistMutation.mutate(
         {
-          userId: sessionData?.user.id as string,
+          userId: sessionData!.user.id as string,
           title: newPlaylistName,
         },
         {

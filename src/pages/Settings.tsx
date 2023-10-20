@@ -15,7 +15,7 @@ const Settings: NextPage = () => {
   const userId = sessionData?.user.id;
   const addUserUpdateMutation = api.user.updateUser.useMutation();
   const { data, refetch } = api.user.getChannelById.useQuery({
-    id: userId as string,
+    id: userId!,
   });
   const channel = data?.user;
   const [user, setUser] = useState({

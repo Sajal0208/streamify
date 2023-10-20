@@ -10,7 +10,7 @@ const LikedVideos: NextPage = () => {
   const QueryTitle = "Liked Videos" as string;
   const { data, isLoading, error } = api.playlist.getPlaylistsByTitle.useQuery({
     title: QueryTitle,
-    userId: sessionData?.user.id as string,
+    userId: sessionData!.user.id as string,
   });
 
   const Error = () => {

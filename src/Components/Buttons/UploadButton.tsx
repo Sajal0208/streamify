@@ -19,7 +19,7 @@ export function UploadButton({ refetch }: { refetch: () => Promise<unknown> }) {
       secure_url: string;
     };
     const videoData = {
-      userId: sessionData?.user.id as string,
+      userId: sessionData!.user.id as string,
       videoUrl: "",
     };
 
