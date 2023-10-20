@@ -19,4 +19,4 @@ export {
 export { Thumbnail } from "./Thumbnail";
 export { ErrorMessage } from "./ErrorMessage";
 export { LoadingMessage } from "./ErrorMessage";
-// export { Content } from "./Content";
+export { Content } from "./Content";
