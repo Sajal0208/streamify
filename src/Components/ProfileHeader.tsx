@@ -17,6 +17,7 @@ export default function ProfileHeader() {
   if (userId == sessionData?.user.id) {
     console.log("This is your profile");
   }
+  
   const tabs = [
     {
       name: "Videos",

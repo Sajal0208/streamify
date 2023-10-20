@@ -43,8 +43,8 @@ export const videoRouter = createTRPCRouter({
       const followers = await ctx.prisma.followEngagement.count({
         where: {
           followerId: video.userId,
-        }
-      })
+        },
+      });
 
       const likes = await ctx.prisma.videoEngagement.count({
         where: {
@@ -76,35 +76,35 @@ export const videoRouter = createTRPCRouter({
       };
       const commentsWithUsers = comments.map(({ user, ...comment }) => ({
         user,
-        comment
+        comment,
       }));
 
       let viewerHasFollowed = false;
       let viewerHasLiked = false;
       let viewerHasDisliked = false;
 
-      if(input.viewerId && input.viewerId !== "") {
+      if (input.viewerId && input.viewerId !== "") {
         viewerHasLiked = !!(await ctx.prisma.videoEngagement.findFirst({
           where: {
             videoId: video.id,
             engagementType: EngagementType.LIKE,
-            userId: input.viewerId
-          }
+            userId: input.viewerId,
+          },
         }));
 
         viewerHasDisliked = !!(await ctx.prisma.videoEngagement.findFirst({
           where: {
             videoId: video.id,
             engagementType: EngagementType.DISLIKE,
-            userId: input.viewerId
-          }
+            userId: input.viewerId,
+          },
         }));
 
         viewerHasFollowed = !!(await ctx.prisma.followEngagement.findFirst({
           where: {
             followingId: video.userId,
-            followerId: input.viewerId
-          }
+            followerId: input.viewerId,
+          },
         }));
       } else {
         viewerHasFollowed = false;
@@ -114,16 +114,16 @@ export const videoRouter = createTRPCRouter({
 
       const viewer = {
         hasFollowed: viewerHasFollowed,
-        hasLiked : viewerHasLiked,
-        hasDisliked: viewerHasDisliked
-      }
+        hasLiked: viewerHasLiked,
+        hasDisliked: viewerHasDisliked,
+      };
 
       return {
         video: videoWithLikesDislikesViews,
         user: userWithFollowers,
         comments: commentsWithUsers,
         viewer,
-      }
+      };
     }),
 
   getRandomVideos: publicProcedure
@@ -226,35 +226,75 @@ export const videoRouter = createTRPCRouter({
       };
     }),
 
-  addVideoToPlaylist: protectedProcedure.input(
-    z.object({
-      playlistId: z.string(),
-      videoId: z.string(),
-    })
-  ).mutation(async ({ctx, input}) => {
-    const playlistAlreadyHasVideo = await ctx.prisma.playlistHasVideo.findMany({
-      where: {
-        playlistId: input.playlistId,
-        videoId: input.videoId
-      }
-    })
+  addVideoToPlaylist: protectedProcedure
+    .input(
+      z.object({
+        playlistId: z.string(),
+        videoId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const playlistAlreadyHasVideo =
+        await ctx.prisma.playlistHasVideo.findMany({
+          where: {
+            playlistId: input.playlistId,
+            videoId: input.videoId,
+          },
+        });
 
-    if(playlistAlreadyHasVideo.length > 0) {
-      const deleteVideo = await ctx.prisma.playlistHasVideo.deleteMany({
+      if (playlistAlreadyHasVideo.length > 0) {
+        const deleteVideo = await ctx.prisma.playlistHasVideo.deleteMany({
+          where: {
+            playlistId: input.playlistId,
+            videoId: input.videoId,
+          },
+        });
+        return deleteVideo;
+      } else {
+        const addVideo = await ctx.prisma.playlistHasVideo.create({
+          data: {
+            playlistId: input.playlistId,
+            videoId: input.videoId,
+          },
+        });
+        return addVideo;
+      }
+    }),
+
+  getVideosByUserId: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const videoWithUser = await ctx.prisma.video.findMany({
         where: {
-          playlistId: input.playlistId,
-          videoId: input.videoId
-        }
-      })
-      return deleteVideo;
-    } else {
-      const addVideo = await ctx.prisma.playlistHasVideo.create({
-        data: {
-          playlistId: input.playlistId,
-          videoId: input.videoId
-        }
-      })
-      return addVideo;
-    }
-  })
+          userId: input,
+          publish: true,
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      const videos = videoWithUser.map(({ user, ...video }) => video);
+      const users = videoWithUser.map(({ user }) => user);
+
+      const videosWithCounts = await Promise.all(
+        videos.map(async (video) => {
+          const views = await ctx.prisma.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+          return {
+            ...video,
+            views,
+          };
+        }),
+      );
+
+      return {
+        videos: videosWithCounts,
+        users: users,
+      };
+    }),
 });
