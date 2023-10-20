@@ -103,4 +103,134 @@ export const userRouter = createTRPCRouter({
         return follow;
       }
     }),
+
+  getUserFollowings: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        viewerId: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          followings: {
+            include: {
+              following: {
+                include: {
+                  followings: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+      const followings = user.followings;
+      const followingsWithViewerFollowedStatus = await Promise.all(
+        followings.map(async (following) => {
+          let viewerHasFollowed = false;
+          if (input.viewerId && input.viewerId !== "") {
+            viewerHasFollowed = !!(await ctx.prisma.followEngagement.findFirst({
+              where: {
+                followingId: following.following.id,
+                followerId: input.viewerId,
+              },
+            }));
+          }
+
+          return { ...following, viewerHasFollowed };
+        }),
+      );
+
+      return {
+        ...user,
+        followings: followingsWithViewerFollowedStatus,
+      };
+    }),
+
+  getDashboardData: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          id: input,
+        },
+        include: {
+          videos: true,
+        },
+      });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+
+      const videosWithCounts = await Promise.all(
+        user.videos.map(async (video) => {
+          const likes = await ctx.prisma.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.LIKE,
+            },
+          });
+
+          const views = await ctx.prisma.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.VIEW,
+            },
+          });
+
+          const dislikes = await ctx.prisma.videoEngagement.count({
+            where: {
+              videoId: video.id,
+              engagementType: EngagementType.DISLIKE,
+            },
+          });
+
+          return {
+            ...video,
+            likes,
+            dislikes,
+            views,
+          };
+        }),
+      );
+
+      const totalLikes = videosWithCounts.reduce(
+        (total, video) => total + video.likes,
+        0,
+      );
+
+      const totalViews = videosWithCounts.reduce(
+        (total, video) => total + video.views,
+        0,
+      );
+
+      const totalFollowers = await ctx.prisma.followEngagement.count({
+        where: {
+          followingId: user.id,
+        },
+      });
+
+      return {
+        user,
+        totalFollowers,
+        totalLikes,
+        totalViews,
+        videos: videosWithCounts,
+      };
+    }),
 });

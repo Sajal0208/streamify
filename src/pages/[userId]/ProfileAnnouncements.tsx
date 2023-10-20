@@ -45,7 +45,7 @@ const ProfileAnnouncements: NextPage = () => {
       id: userId as string,
       viewerId: sessionData?.user.id,
     });
-  const announcements = data?.annoucements;
+  const announcements = data?.announcements;
   const errorTypes = error || announcements?.length == 0 || !data;
   const Error = () => {
     if (isLoading) {

@@ -166,4 +166,96 @@ export const playlistRouter = createTRPCRouter({
         videos: videosWithCounts,
       };
     }),
+
+  getPlaylistsByTitle: publicProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      let rawPlaylist = await ctx.prisma.playlist.findFirst({
+        where: {
+          title: input.title,
+          userId: input.userId,
+        },
+        include: {
+          user: true,
+          videos: {
+            include: {
+              video: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (rawPlaylist) {
+        rawPlaylist = await ctx.prisma.playlist.create({
+          data: {
+            title: input.title,
+            userId: input.userId,
+          },
+          include: {
+            user: true,
+            videos: {
+              include: {
+                video: {
+                  include: {
+                    user: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        const followers = await ctx.prisma.followEngagement.count({
+          where: {
+            followingId: rawPlaylist.userId,
+          },
+        });
+
+        const userWithFollowers = {
+          ...rawPlaylist.user,
+          followers,
+        };
+
+        const videoWithUser = rawPlaylist.videos.map(({ video }) => ({
+          ...video,
+          author: video?.user,
+        }));
+
+        const videos = videoWithUser.map(({ author, ...video }) => video);
+        const users = videoWithUser.map(({ user }) => user);
+
+        const videosWithCounts = await Promise.all(
+          videos.map(async (video) => {
+            const views = await ctx.prisma.videoEngagement.count({
+              where: {
+                videoId: video.id,
+                engagementType: EngagementType.VIEW,
+              },
+            });
+            return {
+              ...video,
+              views,
+            };
+          }),
+        );
+
+        const { user, videos: rawVideos, ...playlistInfo } = rawPlaylist;
+
+        return {
+          user: userWithFollowers,
+          playlist: playlistInfo,
+          authors: users,
+          videos: videosWithCounts,
+        };
+      }
+    }),
 });

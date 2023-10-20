@@ -56,7 +56,7 @@ const ProfilePlaylists: NextPage = () => {
                 title: playlist.title,
                 description: playlist.description || "",
                 videoCount: playlist.videoCount,
-                playlistThumbnail: playlist?.playlistThumbnail || "",
+                playlistThumbnail: playlist?.firstVideoInPlaylist?.video?.thumbnailUrl || "",
                 createdAt: playlist.createdAt,
               }))}
             />

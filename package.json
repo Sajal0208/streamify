@@ -28,6 +28,7 @@
     "next-auth": "^4.23.0",
     "nodemailer": "^6.9.6",
     "react": "18.2.0",
+    "react-cropper": "^2.3.3",
     "react-dom": "18.2.0",
     "react-loading": "^2.0.3",
     "react-player": "^2.13.0",

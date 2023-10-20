@@ -28,6 +28,7 @@ const Dashboard: NextPage = () => {
     stat: string;
     icon: (className: string) => JSX.Element;
   }
+
   const Error = () => {
     if (isLoading) {
       return <LoadingMessage />;
