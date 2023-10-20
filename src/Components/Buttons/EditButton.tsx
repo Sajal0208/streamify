@@ -58,7 +58,7 @@ export function EditButton({ video, refetch }: EditButtonProps) {
     };
     const videoData = {
       id: video.id,
-      userId: sessionData?.user.id as string,
+      userId: sessionData!.user.id as string,
       title: video.title || undefined,
       description: video.description || undefined,
       thumbnailUrl: video.thumbnailUrl || undefined,
@@ -66,7 +66,7 @@ export function EditButton({ video, refetch }: EditButtonProps) {
 
     const formData = new FormData();
     formData.append("upload_preset", "ml_default");
-    formData.append("file", croppedImage as string);
+    formData.append("file", croppedImage!);
     fetch(
       "https://api.cloudinary.com/v1_1/" +
         env.NEXT_PUBLIC_CLOUDINARY_NAME +
