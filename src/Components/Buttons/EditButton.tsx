@@ -58,7 +58,7 @@ export function EditButton({ video, refetch }: EditButtonProps) {
     };
     const videoData = {
       id: video.id,
-      userId: sessionData?.user.id as string,
+      userId: sessionData!.user.id,
       title: video.title || undefined,
       description: video.description || undefined,
       thumbnailUrl: video.thumbnailUrl || undefined,
