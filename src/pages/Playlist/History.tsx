@@ -10,7 +10,7 @@ const History: NextPage = () => {
   const QueryTitle = "History" as string;
   const { data, isLoading, error } = api.playlist.getPlaylistsByTitle.useQuery({
     title: QueryTitle,
-    userId: sessionData!.user.id as string,
+    userId: sessionData!.user.id,
   });
 
   const Error = () => {

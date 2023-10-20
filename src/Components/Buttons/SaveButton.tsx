@@ -15,7 +15,7 @@ export default function SaveButton({ videoId }: { videoId: string }) {
 
   // ! 4 start
   const { data: playlists, refetch: refetchPlaylists } =
-    api.playlist.getSavePlaylistData.useQuery(sessionData!.user!.id, {
+    api.playlist.getSavePlaylistData.useQuery(sessionData!.user.id, {
       enabled: false, // this query will not run automatically
     });
   useEffect(() => {
