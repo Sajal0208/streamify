@@ -24,7 +24,7 @@ export function UploadButton({ refetch }: { refetch: () => Promise<unknown> }) {
     };
 
     const formData = new FormData();
-    formData.append("upload_preset", "user_uploads");
+    formData.append("upload_preset", "ml_default");
 
     if (uploadedVideo) {
       formData.append("file", uploadedVideo);

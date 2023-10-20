@@ -65,7 +65,7 @@ export function EditButton({ video, refetch }: EditButtonProps) {
     };
 
     const formData = new FormData();
-    formData.append("upload_preset", "user_uploads");
+    formData.append("upload_preset", "ml_default");
     formData.append("file", croppedImage as string);
     fetch(
       "https://api.cloudinary.com/v1_1/" +

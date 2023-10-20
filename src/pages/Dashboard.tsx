@@ -16,6 +16,7 @@ import {
 import { api } from "~/utils/api";
 import { GreenEye, GreenUserCheck, GreenHeart } from "~/Components/Icons/Icons";
 import React from "react";
+
 const Dashboard: NextPage = () => {
   const { data: sessionData } = useSession();
 
@@ -23,12 +24,7 @@ const Dashboard: NextPage = () => {
   const { data, isLoading, error, refetch } =
     api.user.getDashboardData.useQuery(userId as string);
 
-  interface StatsItem {
-    name: string;
-    stat: string;
-    icon: (className: string) => JSX.Element;
-  }
-
+  
   const Error = () => {
     if (isLoading) {
       return <LoadingMessage />;
@@ -44,6 +40,12 @@ const Dashboard: NextPage = () => {
       return <></>;
     }
   };
+  
+  interface StatsItem {
+    name: string;
+    stat: string;
+    icon: (className: string) => JSX.Element;
+  }
 
   const stats: StatsItem[] = [
     {
@@ -157,7 +159,7 @@ const Dashboard: NextPage = () => {
                                 <div className="flex">
                                   <div className="h-16 w-16 flex-shrink-0">
                                     <Thumbnail
-                                      thumbnailUrl={video.thumbnailUrl}
+                                      thumbnailUrl={video.thumbnailUrl!}
                                     />
                                   </div>
                                   <div className="ml-4 font-medium text-gray-900">

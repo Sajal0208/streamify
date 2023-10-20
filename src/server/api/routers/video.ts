@@ -1,4 +1,4 @@
-import { EngagementType } from "@prisma/client";
+import { EngagementType, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -7,6 +7,31 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+
+type Context = {
+  prisma: PrismaClient;
+};
+
+const checkVideoOwnership = async (
+  ctx: Context,
+  id: string,
+  userId: string,
+) => {
+  const video = await ctx.prisma.video.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!video || video.userId !== userId) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Video not found",
+    });
+  }
+
+  return video;
+};
 
 export const videoRouter = createTRPCRouter({
   getVideoById: publicProcedure
@@ -296,5 +321,90 @@ export const videoRouter = createTRPCRouter({
         videos: videosWithCounts,
         users: users,
       };
+    }),
+
+  publishVideo: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const video = await checkVideoOwnership(ctx, input.id, input.userId);
+      const publishVideo = await ctx.prisma.video.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          publish: !video.publish,
+        },
+      });
+
+      return publishVideo;
+    }),
+
+  deleteVideo: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const video = await checkVideoOwnership(ctx, input.id, input.userId);
+      const deleteVideo = await ctx.prisma.video.delete({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return deleteVideo;
+    }),
+
+  updateVideo: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        userId: z.string(),
+        title: z.string().optional(),
+        description: z.string().optional(),
+        thumbnailUrl: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const video = await checkVideoOwnership(ctx, input.id, input.userId);
+
+      const updatedVideo = await ctx.prisma.video.update({
+        where: {
+          id: video.id,
+        },
+        data: {
+          title: input.title ?? video.title,
+          description: input.description ?? video.description,
+          thumbnailUrl: input.thumbnailUrl ?? video.thumbnailUrl,
+        },
+      });
+
+      return updatedVideo;
+    }),
+
+  createVideo: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        videoUrl: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const video = await ctx.prisma.video.create({
+        data: {
+          userId: input.userId,
+          videoUrl: input.videoUrl,
+          publish: false,
+        },
+      });
+
+      return video;
     }),
 });
