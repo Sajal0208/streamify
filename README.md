@@ -1,28 +1,30 @@
-# Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# Streamify: Unleash Your Content Journey 🚀
 
-## What's next? How do I make an app with this?
+Elevate your video experience with Streamify, a cutting-edge platform designed to redefine how you engage with digital content.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+# About Streamify
+Streamify is an innovative video-sharing platform that offers a seamless and immersive experience for content creators and viewers alike. Packed with a comprehensive set of features, Streamify empowers creators to share their stories, entertain, and connect with audiences worldwide.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+# Key Features
+Next-Gen Video Playback: Enjoy high-quality video streaming with advanced playback controls for an unparalleled viewing experience.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Content Diversity: Explore a vast array of content ranging from entertainment, education, to inspiring stories, all in one place.
 
-## Learn More
+Creator Empowerment: Unleash your creativity with intuitive tools for content creation, customization, and seamless publishing.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+Community Engagement: Connect with like-minded individuals, build communities, and foster meaningful interactions around your favorite content.
+## Tech Stack
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- 💻 [Typescript](https://www.typescriptlang.org/)
+- 🚀 [Next.js](https://nextjs.org/)
+- ⚛️ [tRPC](https://trpc.io/)
+- 🎨 [TailwindCSS](https://tailwindcss.com/)
+- 📚 [Prisma](https://prisma.io/)
+- 🔒 [NextAuth](https://next-auth.js.org/)
+- 🧘‍♂️ [Zod](https://zod.dev/)
+- 🌏 [Planetscale](https://planetscale.com/)
+- ☁️ [Cloudinary](https://cloudinary.com/)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
