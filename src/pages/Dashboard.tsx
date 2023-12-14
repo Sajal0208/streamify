@@ -76,7 +76,7 @@ const Dashboard: NextPage = () => {
           {!data ? (
             <Error />
           ) : (
-            <div className="flex flex-col gap-8 bg-white pt-3 shadow sm:rounded-lg">
+            <div className="flex flex-col gap-8 bg-white pt-3 shadow sm:rounded-lg p-5">
               <div className="md:flex md:items-center md:justify-between md:space-x-5">
                 <div className="flex items-start space-x-5">
                   <div className="pt-1.5">

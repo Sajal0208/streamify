@@ -350,7 +350,7 @@ export function CropImageModal({
               className="sr-only"
               onChange={onFileChange}
             />
-            <Image
+            <img
               className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
               width="2000"
               height="2000"
@@ -369,7 +369,7 @@ export function CropImageModal({
               className="sr-only"
               onChange={onFileChange}
             />
-            <Image
+            <img
               className="h-32 w-full object-cover lg:h-64"
               src={channel.backgroundImage || "/background.jpg"}
               width={2000}
