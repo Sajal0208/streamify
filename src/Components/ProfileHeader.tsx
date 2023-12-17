@@ -79,7 +79,7 @@ export default function ProfileHeader() {
   return (
     <>
       <Head>
-        <title>{channel?.name ? channel.name + " VidChill Channel" : ""}</title>
+        <title>{channel?.name ? channel.name + " Streamify Channel" : ""}</title>
         <meta name="description" content={channel?.description || ""} />
         <link rel="icon" href="/favicon.ico" />
       </Head>

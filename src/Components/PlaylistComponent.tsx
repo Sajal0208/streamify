@@ -50,7 +50,7 @@ export const PlaylistPage: React.FC<PlaylistPageProps> = ({
   return (
     <>
       <Head>
-        <title>{playlist?.title ? playlist?.title + " - VidChill" : ""}</title>
+        <title>{playlist?.title ? playlist?.title + " - Streamify" : ""}</title>
         <meta name="description" content={playlist?.description || ""} />
         <link rel="icon" href="/favicon.ico" />
       </Head>

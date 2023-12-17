@@ -103,7 +103,7 @@ export default function Navbar({ children }: NavbarProps) {
     {
       icon: (className) => <MessagePlusSquare className={className} />,
       name: "Feedback",
-      path: `mailto:vidchill@vidchill.com`,
+      path: `sajaldewangan0@gmail.com`,
       lineAbove: false,
     },
     {
@@ -148,7 +148,7 @@ export default function Navbar({ children }: NavbarProps) {
         <div className="mx-auto flex max-w-full px-6 lg:px-16 xl:grid xl:grid-cols-12">
           <div className="flex flex-shrink-0 items-center lg:static xl:col-span-2">
             <Link href="/#" aria-label="Home">
-              <Logo className="h-10" />
+              <img src = {'/streamify-white-bg-h.png'} className = "h-8" />
             </Link>
           </div>
           <div className="w-full min-w-0 flex-1 lg:px-0 xl:col-span-8">
