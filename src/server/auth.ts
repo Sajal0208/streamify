@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
     logo: "/logo.svg",
     buttonText: "#FFFFFF",
   },
+  secret: env.NEXTAUTH_SECRET
 };
 
 export const getServerAuthSession = (ctx: {
